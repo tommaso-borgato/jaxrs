@@ -1,0 +1,11 @@
+# podman build --tag jaxrs-eap -f ./EAP-Dockerfile
+# podman run --rm --network=host jaxrs-eap
+# curl http://127.0.0.1:8080/hello
+# podman exec -it 32039f4215f2 /bin/sh
+FROM registry.redhat.io/ubi8/openjdk-17:latest
+USER root
+COPY target/jaxrs-bootable.jar /tmp/src/
+RUN chown -R 185:0 /tmp/src
+USER 185
+RUN /usr/local/s2i/assemble
+CMD /usr/local/s2i/run

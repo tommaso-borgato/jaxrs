@@ -1,0 +1,9 @@
+FROM quay.io/wildfly/wildfly-s2i:latest-jdk17
+LABEL "io.openshift.build.image"="registry.redhat.io/ubi8/openjdk-17@sha256:82a6d10d40c87a891b9e321d9019990b49a17b4c23b61fb62bcc3304a9f8755c"       "io.openshift.build.source-location"="/tmp/build/inputs"       "io.openshift.s2i.destination"="/tmp"
+ENV OPENSHIFT_BUILD_NAME="bootable-jar-https-test-1"     OPENSHIFT_BUILD_NAMESPACE="eap7-1948"
+USER root
+COPY target/jaxrs-bootable.jar /tmp/src/
+RUN chown -R 185:0 /tmp/src
+USER 185
+RUN /usr/local/s2i/assemble
+CMD /usr/local/s2i/run
